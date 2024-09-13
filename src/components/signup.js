@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./signup.css";
 import axios from "axios";
 
-const URL = "10.0.2.25/api";
+const URL = "http://10.0.2.25/api";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -12,7 +12,7 @@ const Signup = () => {
 
   const signupRequest = () => {
     axios
-      .post(`${URL}/register`, {
+      .post(`${URL}/register/`, {
         username: Id,
         name: name,
         password: password,
