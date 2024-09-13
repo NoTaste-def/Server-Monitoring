@@ -1,0 +1,68 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login > h1 {
+  font-size: 50px;
+  text-align: center;
+}
+
+.form_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.input_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 30px;
+
+  height: 400px;
+
+  border: 1px solid black;
+  border-radius: 12px;
+
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.input_box {
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid black;
+  width: 100%;
+
+  outline: none;
+  font-size: 1.3rem;
+}
+
+.input_label {
+  font-size: 1.2rem;
+  font-family: -apple-system;
+  font-weight: 700;
+}
+
+.signup_btn {
+  margin-top: 3vh;
+  text-decoration: none;
+  color: white;
+  background-color: rgba(255, 81, 81, 0.8);
+  border: 0px;
+  border-radius: 12px;
+  width: 320px;
+  height: 45px;
+
+  box-shadow: 0px 0px 2px rgba(137, 137, 137, 0.8);
+}
+.signup_btn:hover {
+  background-color: rgba(255, 81, 81, 1);
+
+  box-shadow: 0px 0px 2px rgba(137, 137, 137, 0.8);
+}

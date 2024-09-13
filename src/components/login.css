@@ -1,0 +1,117 @@
+.login-main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.login-info-container {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 350px;
+  box-shadow: 0px 0px 2px gray;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.login-id-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin: 20px 0px 20px 0px;
+}
+
+.login-pw-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin: 20px 0px 20px 0px;
+}
+
+.un_label {
+  font-family: -apple-system;
+  font-weight: 1000;
+  font-size: 1.2rem;
+  text-align: center;
+  width: 30px;
+}
+
+.UserName {
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid black;
+  width: 300px;
+
+  outline: none;
+  font-size: 1.3rem;
+}
+
+.pw_label {
+  font-family: -apple-system;
+  font-weight: 1000;
+  font-size: 1.2rem;
+  width: 30px;
+  text-align: center;
+}
+
+.UserPassword {
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid black;
+  width: 300px;
+
+  outline: none;
+  font-size: 1.3rem;
+}
+
+.btn-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-button {
+  margin-top: 3vh;
+  text-decoration: none;
+  color: white;
+  background-color: rgba(255, 81, 81, 0.8);
+  border: 0px;
+  border-radius: 12px;
+  width: 320px;
+  height: 45px;
+
+  box-shadow: 0px 0px 2px rgba(137, 137, 137, 0.8);
+}
+
+.login-button:hover {
+  background-color: rgba(255, 81, 81, 1);
+
+  box-shadow: 0px 0px 2px rgba(137, 137, 137, 0.8);
+}
+
+.user-join {
+  margin-top: 3vh;
+  color: black;
+  background-color: rgb(255, 255, 255);
+  border: 0px;
+  border-radius: 12px;
+  width: 320px;
+  height: 45px;
+
+  box-shadow: 0px 0px 2px rgba(137, 137, 137, 0.8);
+}
+
+.user-join:hover {
+  background-color: rgba(236, 236, 236, 0.4);
+
+  box-shadow: 0px 0px 2px rgba(137, 137, 137, 0.8);
+}
