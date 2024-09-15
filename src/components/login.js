@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./login.css";
 import axios from "axios";
 
-const URL = "http://10.0.2.25/api";
+const URL = "http://13.125.63.134:8000/api";
 
 const Login = () => {
   const [isBlind, setIsBlind] = useState("password");
