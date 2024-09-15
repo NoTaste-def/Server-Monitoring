@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "./login.css";
 import axios from "axios";
 
-// const URL = "http://13.125.63.134/api";
-const URL = "http://10.0.2.25:8000/api";
+const URL = "http://13.125.63.134/api";
+// const URL = "http://10.0.2.25:8000/api"; // 모종의 이유로 리퀘스트 안감.
 
 const Login = () => {
   const [isBlind, setIsBlind] = useState("password");
