@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "./signup.css";
 import axios from "axios";
 
-const URL = "http://13.125.63.134/api";
-// const URL = "http://10.0.2.25:8000/api";
+// const URL = "http://13.125.63.134/api";
+const URL = "http://10.0.2.25:8000/api";
 
 const Signup = () => {
   const [name, setName] = useState("");
