@@ -1,0 +1,50 @@
+.main_nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: 1px solid black;
+  box-shadow: 0px 0px 20px lightgrey;
+  padding: 10px 0px 10px 0px; /* 위 왼 아래 오 */
+}
+
+.login_btn_con {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.login_btn_con > button {
+  background-color: transparent;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 8px 15px 8px 15px;
+  font-size: 1.2rem;
+  color: gray;
+}
+
+.login_btn_con > button:nth-child(1) {
+  background-color: transparent;
+  box-shadow: 0px 0px 2px rgba(137, 137, 137, 1);
+  border: 1px solid transparent;
+}
+
+.login_btn_con > button:nth-child(1):hover {
+  color: black;
+  background-color: rgba(236, 236, 236, 0.4);
+  box-shadow: 0px 0px 2px rgba(137, 137, 137, 0.8);
+  border: 1px solid rgb(200, 200, 200);
+}
+
+.login_btn_con > button:nth-child(2) {
+  background-color: transparent;
+  box-shadow: 0px 0px 2px rgba(137, 137, 137, 1);
+  border: 1px solid transparent;
+}
+
+.login_btn_con > button:nth-child(2):hover {
+  color: black;
+  background-color: rgba(236, 236, 236, 0.4);
+  box-shadow: 0px 0px 2px rgba(137, 137, 137, 0.8);
+  border: 1px solid rgb(200, 200, 200);
+}

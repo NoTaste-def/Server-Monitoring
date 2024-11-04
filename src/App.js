@@ -1,17 +1,35 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 
-import login from "./components/login";
-import signup from "./components/signup";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import Dashboard from "./components/Dashboard";
 
 function App() {
+  const navigate = useNavigate();
+
+  const handleClickLogin = () => {
+    navigate("/login");
+  };
+  const handleClickSignup = () => {
+    navigate("/signup");
+  };
+
   return (
-    <BrowserRouter>
+    <div>
+      <nav className="main_nav">
+        <span>Server Monitoring Service</span>
+        <div className="login_btn_con">
+          <button onClick={handleClickLogin}>Log In</button>
+          <button onClick={handleClickSignup}>Sign Up</button>
+        </div>
+      </nav>
       <Routes>
-        <Route path="/login" Component={login} />
-        <Route path="/signup" Component={signup} />
+        <Route path="/" Component={Dashboard} />
+        <Route path="/login" Component={Login} />
+        <Route path="/signup" Component={Signup} />
       </Routes>
-    </BrowserRouter>
+    </div>
   );
 }
 

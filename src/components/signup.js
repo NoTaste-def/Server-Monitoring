@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./signup.css";
+import "./Signup.css";
 import axios from "axios";
 
 const URL = "http://13.125.63.134/api";
@@ -10,6 +10,8 @@ const Signup = () => {
   const [Id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+
+  const [visible, setVisible] = useState(["password", "password"]);
 
   const signupRequest = () => {
     axios
@@ -24,6 +26,17 @@ const Signup = () => {
       .catch((e) => {
         console.log(e);
       });
+  };
+
+  const handleVisible = (index) => {
+    let copy = [...visible];
+    if (copy[index] === "password") {
+      copy[index] = "text";
+      setVisible(copy);
+    } else {
+      copy[index] = "password";
+      setVisible(copy);
+    }
   };
 
   return (
@@ -65,8 +78,11 @@ const Signup = () => {
               <label className="input_label" htmlFor="password">
                 Password
               </label>
+              <button type="button" onClick={(e) => handleVisible(0)}>
+                ㅁ
+              </button>
               <input
-                type="password"
+                type={visible[0]}
                 id="password"
                 name="password"
                 className="input_box"
@@ -79,8 +95,11 @@ const Signup = () => {
               <label className="input_label" htmlFor="confirmPassword">
                 Confirm Password
               </label>
+              <button type="button" onClick={(e) => handleVisible(1)}>
+                ㅁ
+              </button>
               <input
-                type="password"
+                type={visible[1]}
                 id="confirmPassword"
                 name="confirmPassword"
                 className="input_box"
@@ -89,7 +108,7 @@ const Signup = () => {
                 }}
               />
             </div>
-            <div className="checkbox">
+            {/* <div className="checkbox">
               <input
                 type="checkbox"
                 id="agree"
@@ -101,7 +120,7 @@ const Signup = () => {
                 By creating an account you agree to our{" "}
                 <a href="#">Privacy Policy</a>
               </label>
-            </div>
+            </div> */}
           </div>
           <p id="sign">
             Already have an account? <a href="/login">Sign in</a>
