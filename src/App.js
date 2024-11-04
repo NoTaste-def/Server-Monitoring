@@ -14,11 +14,14 @@ function App() {
   const handleClickSignup = () => {
     navigate("/signup");
   };
+  const handleClickMain = () => {
+    navigate("/");
+  };
 
   return (
     <div>
       <nav className="main_nav">
-        <span>Server Monitoring Service</span>
+        <span onClick={handleClickMain}>Server Monitoring Service</span>
         <div className="login_btn_con">
           <button onClick={handleClickLogin}>Log In</button>
           <button onClick={handleClickSignup}>Sign Up</button>

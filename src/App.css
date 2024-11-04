@@ -8,6 +8,15 @@
   padding: 10px 0px 10px 0px; /* 위 왼 아래 오 */
 }
 
+.main_nav > span {
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.main_nav > span:hover {
+  filter: drop-shadow(0 0 1px rgb(137, 137, 137));
+}
+
 .login_btn_con {
   display: flex;
   flex-direction: row;
@@ -15,6 +24,8 @@
 }
 
 .login_btn_con > button {
+  cursor: pointer;
+
   background-color: transparent;
   border: 1px solid black;
   border-radius: 8px;
