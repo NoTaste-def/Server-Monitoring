@@ -1,9 +1,9 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 
-import Login from "./components/Login";
-import Signup from "./components/Signup";
-import Dashboard from "./components/Dashboard";
+import Login from "./components/Login.js";
+import Signup from "./components/Signup.js";
+import Dashboard from "./components/Dashboard.js";
 
 function App() {
   const navigate = useNavigate();
