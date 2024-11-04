@@ -28,7 +28,15 @@ const Dashboard = () => {
     };
   }, []);
 
-  return <div>{data ? <pre>{data}</pre> : <h1>Waiting for Data...</h1>}</div>;
+  return (
+    <div>
+      {data ? (
+        <pre>{JSON.stringify(data, null, 2)}</pre>
+      ) : (
+        <h1>Waiting for Data...</h1>
+      )}
+    </div>
+  );
 };
 
 export default Dashboard;
