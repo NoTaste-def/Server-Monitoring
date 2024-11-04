@@ -4,7 +4,7 @@ const Dashboard = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://13.125.63.134:8000/ws/metrics/'");
+    const socket = new WebSocket("ws://13.125.63.134:8000/ws/metrics/");
 
     // 웹 소켓 연결이 열렸을 때 실행될 함수
     socket.onopen = () => {
