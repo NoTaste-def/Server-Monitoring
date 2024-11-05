@@ -1,0 +1,28 @@
+/* MyResponsiveLine.module.css */
+
+.graph_card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 0px 10px 30px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative; /* for positioning resize handle */
+}
+
+.graph_card h3 {
+  font-size: 18px;
+  color: #7e7e7e;
+}
+
+.resize_handle {
+  width: 10px;
+  height: 10px;
+  background-color: #333;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  cursor: se-resize;
+}

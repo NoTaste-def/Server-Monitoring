@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MyResponsiveLine from "./MyResponsiveLine";
+import style from "./Dashboard.module.css";
 
 const appendData = (existingData, newEntry) => {
   const time = new Date(newEntry.value[0] * 1000).toLocaleTimeString();
@@ -21,9 +22,6 @@ const Dashboard = () => {
   const [metricsData, setMetricsData] = useState({
     cpu_usage: [],
     cpu_core_usage: [],
-    load_average_1: [],
-    load_average_5: [],
-    load_average_15: [],
     memory_total: [],
     memory_used: [],
     disk_read_write: [],
@@ -51,18 +49,6 @@ const Dashboard = () => {
         cpu_core_usage: appendData(
           prevData.cpu_core_usage,
           receiveData.node_exporter.cpu_core_usage[0]
-        ),
-        load_average_1: appendData(
-          prevData.load_average_1,
-          receiveData.node_exporter.load_average_1[0]
-        ),
-        load_average_5: appendData(
-          prevData.load_average_5,
-          receiveData.node_exporter.load_average_5[0]
-        ),
-        load_average_15: appendData(
-          prevData.load_average_15,
-          receiveData.node_exporter.load_average_15[0]
         ),
         memory_total: appendData(
           prevData.memory_total,
@@ -101,7 +87,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div>
+    <div className={style.dashboard_wrapper}>
       <h2>Node Exporter Metrics</h2>
       {Object.keys(metricsData).map((key) => (
         <MyResponsiveLine
