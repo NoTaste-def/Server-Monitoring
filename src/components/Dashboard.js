@@ -6,13 +6,19 @@ const appendData = (existingData, newEntry, id) => {
   const time = new Date(newEntry.value[0] * 1000).toLocaleTimeString();
   const value = parseFloat(newEntry.value[1]);
 
-  return [
-    ...existingData,
-    {
-      x: time,
-      y: value,
-    },
-  ];
+  // 값이 NaN인지 확인하여 유효한 데이터만 추가
+  if (!isNaN(value)) {
+    return [
+      ...existingData,
+      {
+        x: time,
+        y: value,
+      },
+    ];
+  }
+
+  // 유효하지 않으면 기존 데이터 반환
+  return existingData;
 };
 
 const Dashboard = () => {
@@ -28,7 +34,6 @@ const Dashboard = () => {
     network_receive: [],
     network_transmit: [],
     uptime: [],
-    reboots: [],
   });
 
   useEffect(() => {
@@ -98,11 +103,6 @@ const Dashboard = () => {
           prevData.uptime,
           receiveData.node_exporter.uptime[0],
           "Uptime"
-        ),
-        reboots: appendData(
-          prevData.reboots,
-          receiveData.node_exporter.reboots[0],
-          "Reboots"
         ),
       }));
     };
