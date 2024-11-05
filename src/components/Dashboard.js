@@ -1,56 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { ResponsiveLine } from "@nivo/line";
+import MyResponsiveLine from "./MyResponsiveLine";
 
-const MyResponsiveLine = ({ data }) => (
-  <ResponsiveLine
-    data={data}
-    margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-    xScale={{ type: "point" }}
-    yScale={{
-      type: "linear",
-      min: "auto",
-      max: "auto",
-      stacked: true,
-      reverse: false,
-    }}
-    axisBottom={{
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: "Time",
-      legendOffset: 36,
-      legendPosition: "middle",
-    }}
-    axisLeft={{
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: "Value",
-      legendOffset: -40,
-      legendPosition: "middle",
-    }}
-    colors={{ scheme: "nivo" }}
-    pointSize={10}
-    pointColor={{ theme: "background" }}
-    pointBorderWidth={2}
-    pointBorderColor={{ from: "serieColor" }}
-    pointLabelYOffset={-12}
-    useMesh={true}
-    legends={[
-      {
-        anchor: "bottom-right",
-        direction: "column",
-        translateX: 100,
-        itemWidth: 80,
-        itemHeight: 20,
-        symbolSize: 12,
-      },
-    ]}
-  />
-);
+// 누적 데이터를 만드는 공통 함수
+const createCumulativeData = (rawData, id) => {
+  let cumulativeValue = 0;
+  return [
+    {
+      id: `${id} (Cumulative)`,
+      data: rawData.map((entry) => {
+        cumulativeValue += parseFloat(entry.value[1]);
+        return {
+          x: new Date(entry.value[0] * 1000).toLocaleTimeString(),
+          y: cumulativeValue,
+        };
+      }),
+    },
+  ];
+};
 
 const Dashboard = () => {
-  const [chartData, setChartData] = useState([]);
+  const [metricsData, setMetricsData] = useState({});
 
   useEffect(() => {
     const socket = new WebSocket("ws://13.125.63.134:8000/ws/metrics/");
@@ -62,20 +31,73 @@ const Dashboard = () => {
 
     socket.onmessage = (e) => {
       const receiveData = JSON.parse(e.data);
+      const formattedData = {};
 
-      // 예: cpu_usage 데이터 변환
-      const formattedData = [
-        {
-          id: "cpu_usage",
-          color: "hsl(158, 70%, 50%)",
-          data: receiveData.node_exporter.cpu_usage.map((entry) => ({
-            x: new Date(entry.value[0] * 1000).toLocaleTimeString(), // 타임스탬프를 x 축으로 변환
-            y: parseFloat(entry.value[1]), // y 축은 값으로 변환
-          })),
-        },
-      ];
+      // 각 메트릭을 누적 데이터 형식으로 변환
+      formattedData["cpu_usage"] = createCumulativeData(
+        receiveData.node_exporter.cpu_usage,
+        "CPU Usage"
+      );
+      formattedData["cpu_core_usage"] = createCumulativeData(
+        receiveData.node_exporter.cpu_core_usage,
+        "CPU Core Usage"
+      );
+      formattedData["load_average_1"] = createCumulativeData(
+        receiveData.node_exporter.load_average_1,
+        "Load Average 1m"
+      );
+      formattedData["load_average_5"] = createCumulativeData(
+        receiveData.node_exporter.load_average_5,
+        "Load Average 5m"
+      );
+      formattedData["load_average_15"] = createCumulativeData(
+        receiveData.node_exporter.load_average_15,
+        "Load Average 15m"
+      );
+      formattedData["memory_total"] = createCumulativeData(
+        receiveData.node_exporter.memory_total,
+        "Memory Total"
+      );
+      formattedData["memory_used"] = createCumulativeData(
+        receiveData.node_exporter.memory_used,
+        "Memory Used"
+      );
+      formattedData["disk_read_write"] = createCumulativeData(
+        receiveData.node_exporter.disk_read_write,
+        "Disk Read/Write"
+      );
+      formattedData["network_receive"] = createCumulativeData(
+        receiveData.node_exporter.network_receive,
+        "Network Receive"
+      );
+      formattedData["network_transmit"] = createCumulativeData(
+        receiveData.node_exporter.network_transmit,
+        "Network Transmit"
+      );
+      formattedData["uptime"] = createCumulativeData(
+        receiveData.node_exporter.uptime,
+        "Uptime"
+      );
+      formattedData["reboots"] = createCumulativeData(
+        receiveData.node_exporter.reboots,
+        "Reboots"
+      );
 
-      setChartData(formattedData);
+      // Prometheus 메트릭 예시
+      formattedData["django_http_requests_total_by_method_total"] =
+        receiveData.prometheus.django_http_requests_total_by_method_total.map(
+          (entry) => ({
+            id: `HTTP Requests (${entry.metric.method})`,
+            data: [
+              {
+                x: entry.metric.method,
+                y: parseFloat(entry.value[1]),
+              },
+            ],
+          })
+        );
+
+      setMetricsData(formattedData);
     };
 
     socket.onclose = () => {
@@ -88,12 +110,11 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div style={{ height: "500px" }}>
-      {chartData.length > 0 ? (
-        <MyResponsiveLine data={chartData} />
-      ) : (
-        <h1>Waiting for Data...</h1>
-      )}
+    <div>
+      <h2>Node Exporter Metrics</h2>
+      {Object.keys(metricsData).map((key) => (
+        <MyResponsiveLine key={key} data={metricsData[key]} title={key} />
+      ))}
     </div>
   );
 };
