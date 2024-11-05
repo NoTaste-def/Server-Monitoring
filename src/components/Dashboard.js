@@ -1,25 +1,35 @@
 import React, { useEffect, useState } from "react";
 import MyResponsiveLine from "./MyResponsiveLine";
 
-// 누적 데이터를 만드는 공통 함수
-const createCumulativeData = (rawData, id) => {
-  let cumulativeValue = 0;
+// 새로운 데이터를 기존 데이터에 추가하여 누적하는 함수
+const appendData = (existingData, newEntry, id) => {
+  const time = new Date(newEntry.value[0] * 1000).toLocaleTimeString();
+  const value = parseFloat(newEntry.value[1]);
+
   return [
+    ...existingData,
     {
-      id: `${id} (Cumulative)`,
-      data: rawData.map((entry) => {
-        cumulativeValue += parseFloat(entry.value[1]);
-        return {
-          x: new Date(entry.value[0] * 1000).toLocaleTimeString(),
-          y: cumulativeValue,
-        };
-      }),
+      x: time,
+      y: value,
     },
   ];
 };
 
 const Dashboard = () => {
-  const [metricsData, setMetricsData] = useState({});
+  const [metricsData, setMetricsData] = useState({
+    cpu_usage: [],
+    cpu_core_usage: [],
+    load_average_1: [],
+    load_average_5: [],
+    load_average_15: [],
+    memory_total: [],
+    memory_used: [],
+    disk_read_write: [],
+    network_receive: [],
+    network_transmit: [],
+    uptime: [],
+    reboots: [],
+  });
 
   useEffect(() => {
     const socket = new WebSocket("ws://13.125.63.134:8000/ws/metrics/");
@@ -31,73 +41,70 @@ const Dashboard = () => {
 
     socket.onmessage = (e) => {
       const receiveData = JSON.parse(e.data);
-      const formattedData = {};
 
-      // 각 메트릭을 누적 데이터 형식으로 변환
-      formattedData["cpu_usage"] = createCumulativeData(
-        receiveData.node_exporter.cpu_usage,
-        "CPU Usage"
-      );
-      formattedData["cpu_core_usage"] = createCumulativeData(
-        receiveData.node_exporter.cpu_core_usage,
-        "CPU Core Usage"
-      );
-      formattedData["load_average_1"] = createCumulativeData(
-        receiveData.node_exporter.load_average_1,
-        "Load Average 1m"
-      );
-      formattedData["load_average_5"] = createCumulativeData(
-        receiveData.node_exporter.load_average_5,
-        "Load Average 5m"
-      );
-      formattedData["load_average_15"] = createCumulativeData(
-        receiveData.node_exporter.load_average_15,
-        "Load Average 15m"
-      );
-      formattedData["memory_total"] = createCumulativeData(
-        receiveData.node_exporter.memory_total,
-        "Memory Total"
-      );
-      formattedData["memory_used"] = createCumulativeData(
-        receiveData.node_exporter.memory_used,
-        "Memory Used"
-      );
-      formattedData["disk_read_write"] = createCumulativeData(
-        receiveData.node_exporter.disk_read_write,
-        "Disk Read/Write"
-      );
-      formattedData["network_receive"] = createCumulativeData(
-        receiveData.node_exporter.network_receive,
-        "Network Receive"
-      );
-      formattedData["network_transmit"] = createCumulativeData(
-        receiveData.node_exporter.network_transmit,
-        "Network Transmit"
-      );
-      formattedData["uptime"] = createCumulativeData(
-        receiveData.node_exporter.uptime,
-        "Uptime"
-      );
-      formattedData["reboots"] = createCumulativeData(
-        receiveData.node_exporter.reboots,
-        "Reboots"
-      );
-
-      // Prometheus 메트릭 예시
-      formattedData["django_http_requests_total_by_method_total"] =
-        receiveData.prometheus.django_http_requests_total_by_method_total.map(
-          (entry) => ({
-            id: `HTTP Requests (${entry.metric.method})`,
-            data: [
-              {
-                x: entry.metric.method,
-                y: parseFloat(entry.value[1]),
-              },
-            ],
-          })
-        );
-
-      setMetricsData(formattedData);
+      // 데이터를 누적하여 갱신
+      setMetricsData((prevData) => ({
+        cpu_usage: appendData(
+          prevData.cpu_usage,
+          receiveData.node_exporter.cpu_usage[0],
+          "CPU Usage"
+        ),
+        cpu_core_usage: appendData(
+          prevData.cpu_core_usage,
+          receiveData.node_exporter.cpu_core_usage[0],
+          "CPU Core Usage"
+        ),
+        load_average_1: appendData(
+          prevData.load_average_1,
+          receiveData.node_exporter.load_average_1[0],
+          "Load Average 1m"
+        ),
+        load_average_5: appendData(
+          prevData.load_average_5,
+          receiveData.node_exporter.load_average_5[0],
+          "Load Average 5m"
+        ),
+        load_average_15: appendData(
+          prevData.load_average_15,
+          receiveData.node_exporter.load_average_15[0],
+          "Load Average 15m"
+        ),
+        memory_total: appendData(
+          prevData.memory_total,
+          receiveData.node_exporter.memory_total[0],
+          "Memory Total"
+        ),
+        memory_used: appendData(
+          prevData.memory_used,
+          receiveData.node_exporter.memory_used[0],
+          "Memory Used"
+        ),
+        disk_read_write: appendData(
+          prevData.disk_read_write,
+          receiveData.node_exporter.disk_read_write[0],
+          "Disk Read/Write"
+        ),
+        network_receive: appendData(
+          prevData.network_receive,
+          receiveData.node_exporter.network_receive[0],
+          "Network Receive"
+        ),
+        network_transmit: appendData(
+          prevData.network_transmit,
+          receiveData.node_exporter.network_transmit[0],
+          "Network Transmit"
+        ),
+        uptime: appendData(
+          prevData.uptime,
+          receiveData.node_exporter.uptime[0],
+          "Uptime"
+        ),
+        reboots: appendData(
+          prevData.reboots,
+          receiveData.node_exporter.reboots[0],
+          "Reboots"
+        ),
+      }));
     };
 
     socket.onclose = () => {
@@ -113,7 +120,11 @@ const Dashboard = () => {
     <div>
       <h2>Node Exporter Metrics</h2>
       {Object.keys(metricsData).map((key) => (
-        <MyResponsiveLine key={key} data={metricsData[key]} title={key} />
+        <MyResponsiveLine
+          key={key}
+          data={[{ id: key, data: metricsData[key] }]}
+          title={key}
+        />
       ))}
     </div>
   );
