@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import MyResponsiveLine from "./MyResponsiveLine";
 
 // 새로운 데이터를 기존 데이터에 추가하여 누적하는 함수
-const appendData = (existingData, newEntry, id) => {
+const appendData = (existingData, newEntry) => {
   const time = new Date(newEntry.value[0] * 1000).toLocaleTimeString();
   const value = parseFloat(newEntry.value[1]);
 
-  // 값이 NaN인지 확인하여 유효한 데이터만 추가
-  if (!isNaN(value)) {
+  // 값이 유효한지 확인하고, 그렇지 않다면 데이터를 추가하지 않음
+  if (!isNaN(value) && value !== undefined && value !== null) {
     return [
       ...existingData,
       {
@@ -17,7 +17,7 @@ const appendData = (existingData, newEntry, id) => {
     ];
   }
 
-  // 유효하지 않으면 기존 데이터 반환
+  // 유효하지 않은 경우 기존 데이터 반환
   return existingData;
 };
 
