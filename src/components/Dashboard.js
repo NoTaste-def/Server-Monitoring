@@ -137,7 +137,7 @@ const Dashboard = () => {
         <button
           onClick={() => {
             axios
-              .get("http://13.125.63.134:8000/status/recorded-sessions")
+              .get("http://13.125.63.134/status/recorded-sessions")
               .then((res) => {
                 console.log(res);
               })
