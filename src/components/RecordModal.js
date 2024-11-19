@@ -34,10 +34,33 @@ const RecordModal = ({
           );
         };
       }
+      console.log("Start Recording command sent");
       setRecordFlag(true);
       setIsOpen(false);
     } else {
       console.error("Socket is not initialized.");
+    }
+  };
+
+  // 녹화 버튼 핸들러
+  const handleRecordButton = () => {
+    if (recordFlag) {
+      // Stop Recording
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(
+          JSON.stringify({
+            command: "stop_recording",
+          })
+        );
+        console.log("Stop Recording command sent");
+      } else {
+        console.error(
+          "WebSocket is not open. Cannot send Stop Recording command."
+        );
+      }
+      setRecordFlag(false); // 녹화 중지
+    } else {
+      // Start Recording
     }
   };
 

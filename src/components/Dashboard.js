@@ -1,30 +1,12 @@
 import React, { useEffect, useState } from "react";
 import MyResponsiveLine from "./MyResponsiveLine";
-import style from "./Dashboard.module.css";
 import RecordModal from "./RecordModal";
+import SessionListModal from "./SessionListModal";
+import style from "./Dashboard.module.css";
 import axios from "axios";
 
-// 데이터 추가를 위한 유틸리티 함수
-const appendData = (existingData, newEntry) => {
-  const time = new Date(newEntry.value[0] * 1000).toLocaleTimeString();
-  const value = parseFloat(newEntry.value[1]);
-
-  if (time && !isNaN(value) && value !== null && value !== undefined) {
-    const updatedData = [
-      ...existingData,
-      {
-        x: time,
-        y: value,
-      },
-    ];
-    return updatedData.slice(-100); // 최근 100개의 데이터만 유지
-  }
-  return existingData;
-};
-
-// Dashboard 컴포넌트
 const Dashboard = () => {
-  const [socket, setSocket] = useState(null); // WebSocket 상태 관리
+  const [socket, setSocket] = useState(null);
   const [metricsData, setMetricsData] = useState({
     cpu_usage: [],
     cpu_core_usage: [],
@@ -36,12 +18,31 @@ const Dashboard = () => {
     uptime: [],
   });
 
-  const [IPData, setIPData] = useState();
+  const [IPData, setIPData] = useState({});
+  const [recordFlag, setRecordFlag] = useState(false);
+  const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
+  const [isSessionListModalOpen, setIsSessionListModalOpen] = useState(false);
+  const [sessionList, setSessionList] = useState([]); // 세션 리스트 상태
 
-  const [recordFlag, setRecordFlag] = useState(false); // 녹화 상태 플래그
-  const [isOpen, setIsOpen] = useState(false); // 모달 열림 상태
+  // 데이터 추가 유틸리티 함수
+  const appendData = (existingData, newEntry) => {
+    const time = new Date(newEntry.value[0] * 1000).toLocaleTimeString();
+    const value = parseFloat(newEntry.value[1]);
 
-  // WebSocket 연결 설정 및 이벤트 처리
+    if (time && !isNaN(value) && value !== null && value !== undefined) {
+      const updatedData = [
+        ...existingData,
+        {
+          x: time,
+          y: value,
+        },
+      ];
+      return updatedData.slice(-100); // 최근 100개의 데이터만 유지
+    }
+    return existingData;
+  };
+
+  // WebSocket 연결 설정
   useEffect(() => {
     const ws = new WebSocket("ws://13.125.63.134:8000/ws/metrics/");
     setSocket(ws);
@@ -54,9 +55,11 @@ const Dashboard = () => {
     ws.onmessage = (e) => {
       try {
         const receiveData = JSON.parse(e.data);
+
         if (receiveData?.ip_requests) {
-          setIPData(receiveData.ip_requests);
+          setIPData(receiveData.ip_requests); // 실시간 IP 데이터 업데이트
         }
+
         if (receiveData?.node_exporter) {
           setMetricsData((prevData) => ({
             cpu_usage: appendData(
@@ -92,8 +95,6 @@ const Dashboard = () => {
               receiveData.node_exporter.uptime?.[0]
             ),
           }));
-        } else {
-          console.error("Invalid data format:", receiveData);
         }
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);
@@ -111,23 +112,43 @@ const Dashboard = () => {
 
   // 녹화 버튼 핸들러
   const handleRecordButton = () => {
-    if (!recordFlag) {
-      setIsOpen(true);
-    } else {
-      setRecordFlag(false);
-      if (socket?.readyState === WebSocket.OPEN) {
+    if (recordFlag) {
+      // Stop Recording
+      if (socket && socket.readyState === WebSocket.OPEN) {
         socket.send(
           JSON.stringify({
             command: "stop_recording",
           })
         );
+        console.log("Stop Recording command sent");
+      } else {
+        console.error(
+          "WebSocket is not open. Cannot send Stop Recording command."
+        );
       }
-      alert("You stopped recording");
+      setRecordFlag(false); // 녹화 중지
+    } else {
+      // Start Recording
+      setIsRecordModalOpen(true); // 녹화 모달 열기
     }
+  };
+
+  // 세션 데이터 가져오기
+  const fetchSessionData = () => {
+    axios
+      .get("http://13.125.63.134/status/recorded-sessions/")
+      .then((res) => {
+        setSessionList(res.data.sessions); // 세션 리스트 저장
+        setIsSessionListModalOpen(true); // 세션 리스트 모달 열기
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
     <div className={style.dashboard_wrapper}>
+      {/* 실시간 IP 데이터 표시 */}
       <div className={style.floated_ip_con}>
         {IPData && typeof IPData === "object" ? (
           Object.entries(IPData).map(([ip, count], index) => (
@@ -137,12 +158,12 @@ const Dashboard = () => {
               </span>
               <button
                 onClick={() => {
-                  const updatedIPData = { ...IPData }; // 기존 객체 복사
-                  delete updatedIPData[ip]; // 해당 키 삭제
-                  setIPData(updatedIPData); // 상태 업데이트
+                  const updatedIPData = { ...IPData };
+                  delete updatedIPData[ip];
+                  setIPData(updatedIPData);
                 }}
                 className={style.ip_deletion_btn}
-              />
+              ></button>
             </div>
           ))
         ) : (
@@ -150,26 +171,15 @@ const Dashboard = () => {
         )}
       </div>
 
+      {/* 버튼 영역 */}
       <div className={style.floated_btn_con}>
         <button onClick={handleRecordButton}>
-          {recordFlag ? "Stop" : "Record"}
+          {recordFlag ? "Record Stop" : "Record Start"}
         </button>
-
-        <button
-          onClick={() => {
-            axios
-              .get("http://13.125.63.134/status/recorded-sessions/")
-              .then((res) => {
-                console.log(res);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }}
-        >
-          확인
-        </button>
+        <button onClick={fetchSessionData}>View</button>
       </div>
+
+      {/* 실시간 데이터 시각화 */}
       <h2>Node Exporter Metrics</h2>
       {Object.keys(metricsData).map((key) => (
         <MyResponsiveLine
@@ -178,13 +188,23 @@ const Dashboard = () => {
           title={key}
         />
       ))}
-      {isOpen && (
+
+      {/* 녹화 모달 */}
+      {isRecordModalOpen && (
         <RecordModal
+          isOpen={isRecordModalOpen}
+          setIsOpen={setIsRecordModalOpen}
+          socket={socket}
           recordFlag={recordFlag}
           setRecordFlag={setRecordFlag}
-          socket={socket}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
+        />
+      )}
+
+      {/* 세션 리스트 모달 */}
+      {isSessionListModalOpen && (
+        <SessionListModal
+          sessions={sessionList}
+          onClose={() => setIsSessionListModalOpen(false)}
         />
       )}
     </div>

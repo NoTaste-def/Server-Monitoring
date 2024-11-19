@@ -1,0 +1,46 @@
+.modal_background {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.modal_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border-radius: 10px;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  background-color: white;
+  width: 900px;
+  max-height: 90vh; /* 윈도우 높이에 맞게 최대 높이 제한 */
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 시각적 분리 */
+}
+
+.modal_content {
+  padding: 20px; /* 내용물과 가장자리 간격 확보 */
+}
+
+.modal_header {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Close 버튼을 우측에 정렬 */
+  padding: 10px 20px;
+  background-color: #f0f0f0; /* 상단 배경 추가 */
+  border-bottom: 1px solid #ddd; /* 시각적 분리 */
+  position: sticky; /* 스크롤할 때 상단에 고정 */
+  top: 0;
+  z-index: 1;
+}
+
+.session_item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
