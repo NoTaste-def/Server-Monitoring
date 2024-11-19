@@ -36,6 +36,8 @@ const Dashboard = () => {
     uptime: [],
   });
 
+  const [IPData, setIPData] = useState();
+
   const [recordFlag, setRecordFlag] = useState(false); // 녹화 상태 플래그
   const [isOpen, setIsOpen] = useState(false); // 모달 열림 상태
 
@@ -52,6 +54,9 @@ const Dashboard = () => {
     ws.onmessage = (e) => {
       try {
         const receiveData = JSON.parse(e.data);
+        if (receiveData?.ip_requests) {
+          setIPData(receiveData.ip_requests);
+        }
         if (receiveData?.node_exporter) {
           setMetricsData((prevData) => ({
             cpu_usage: appendData(
@@ -123,17 +128,33 @@ const Dashboard = () => {
 
   return (
     <div className={style.dashboard_wrapper}>
+      <div className={style.floated_ip_con}>
+        {IPData && typeof IPData === "object" ? (
+          Object.entries(IPData).map(([ip, count], index) => (
+            <div className={style.each_ip_object} key={index}>
+              <span>
+                <strong>{ip}</strong>: {count} req
+              </span>
+              <button
+                onClick={() => {
+                  const updatedIPData = { ...IPData }; // 기존 객체 복사
+                  delete updatedIPData[ip]; // 해당 키 삭제
+                  setIPData(updatedIPData); // 상태 업데이트
+                }}
+                className={style.ip_deletion_btn}
+              />
+            </div>
+          ))
+        ) : (
+          <div>No IP data available</div>
+        )}
+      </div>
+
       <div className={style.floated_btn_con}>
         <button onClick={handleRecordButton}>
           {recordFlag ? "Stop" : "Record"}
         </button>
-        <button
-          onClick={() => {
-            alert("ㅁㄹㅇㄴ");
-          }}
-        >
-          IP Block
-        </button>
+
         <button
           onClick={() => {
             axios
@@ -146,7 +167,7 @@ const Dashboard = () => {
               });
           }}
         >
-          녹화 확인
+          확인
         </button>
       </div>
       <h2>Node Exporter Metrics</h2>
