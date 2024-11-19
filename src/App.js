@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./components/Login.js";
 import Signup from "./components/Signup.js";
 import Dashboard from "./components/Dashboard.js";
+import RecordModal from "./components/RecordModal.js";
 
 function App() {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ function App() {
         <Route path="/" Component={Dashboard} />
         <Route path="/login" Component={Login} />
         <Route path="/signup" Component={Signup} />
+        <Route path="/test" Component={RecordModal} />
       </Routes>
     </div>
   );

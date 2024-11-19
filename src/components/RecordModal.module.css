@@ -1,0 +1,71 @@
+.modal_background {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.modal_wrapper {
+  border-radius: 10px;
+
+  position: fixed;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  background-color: white;
+  width: 300px;
+  height: 150px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+
+.modal_input_box > input {
+  border: none;
+  border-bottom: 1px solid black;
+  caret-color: rgb(0, 147, 17);
+}
+.modal_input_box > input:focus {
+  outline: none;
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+.modal_nav {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.modal_nav > button {
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.record_trigger_btn {
+  background-color: rgb(255, 73, 73, 0.8);
+  transition: background-color 0.15s ease-in-out;
+  transition: color 0.3s ease-out;
+}
+
+.record_trigger_btn:hover {
+  background-color: rgb(255, 73, 73);
+  color: floralwhite;
+  box-shadow: 0px 0px 8px rgba(137, 137, 137, 0.8);
+}
+
+.close_btn {
+  background-color: rgba(236, 236, 236, 0.4);
+  transition: all 0.15s ease-in-out;
+}
+
+.close_btn:hover {
+  background-color: rgba(236, 236, 236);
+  box-shadow: 0px 0px 8px rgba(137, 137, 137, 0.8);
+}
