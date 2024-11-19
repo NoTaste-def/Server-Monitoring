@@ -53,7 +53,7 @@
   font-size: 1.3rem;
   font-weight: bold;
 
-  transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-out;
 }
 
 .model_header_btn:hover {
@@ -65,7 +65,7 @@
   color: red;
 }
 
-.model_header_btn:nth-child(2):hover {
+.model_header_btn:nth-child(3):hover {
   filter: drop-shadow(0 0 2px rgb(122, 122, 122));
   color: red;
 }
