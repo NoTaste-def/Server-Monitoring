@@ -50,6 +50,20 @@
   margin-right: 18px;
 }
 
+.set_visible_btn {
+  background-color: transparent;
+  border: none;
+
+  font-size: 1.3rem;
+
+  transition: all 1s ease-out;
+}
+
+.set_visible_btn:hover {
+  color: red;
+  filter: drop-shadow(0 0 1px rgb(137, 137, 137));
+}
+
 .signup_btn {
   margin-top: 3vh;
   text-decoration: none;

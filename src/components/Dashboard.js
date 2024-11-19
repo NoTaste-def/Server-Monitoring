@@ -27,9 +27,12 @@ const Dashboard = () => {
   // 데이터 추가 유틸리티 함수
   const appendData = (existingData, newEntry) => {
     const time = new Date(newEntry.value[0] * 1000).toLocaleTimeString();
+    // value[0]을 시간으로
     const value = parseFloat(newEntry.value[1]);
+    // value[1]을 값으로 사용
 
     if (time && !isNaN(value) && value !== null && value !== undefined) {
+      // x축 값이 있고, NaN null undefined 값이 없을때 데이터 추가.
       const updatedData = [
         ...existingData,
         {

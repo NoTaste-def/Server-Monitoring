@@ -73,12 +73,20 @@ const SessionListModal = ({ sessions, onClose }) => {
       <div className={style.modal_background} onClick={onClose} />
       <div className={style.modal_wrapper}>
         <div className={style.modal_header}>
-          <button onClick={onClose}>Close</button>
+          <button
+            className={style.model_header_btn}
+            onClick={() => setSelectedSessionData(null)}
+          >
+            ⏎
+          </button>
+          <h3>{selectedSessionData ? "Session Data" : "Session List"}</h3>
+          <button className={style.model_header_btn} onClick={onClose}>
+            ✕
+          </button>
         </div>
         <div className={style.modal_content}>
           {selectedSessionData ? (
             <>
-              <h2>Session Data</h2>
               {Object.keys(selectedSessionData).map((key) => {
                 const chartData = selectedSessionData[key];
 
@@ -101,20 +109,16 @@ const SessionListModal = ({ sessions, onClose }) => {
                   />
                 );
               })}
-              <button onClick={() => setSelectedSessionData(null)}>
-                Back to Sessions
-              </button>
             </>
           ) : (
             <>
-              <h2>Session List</h2>
               {loading ? (
                 <p>Loading...</p>
               ) : (
-                <ul>
+                <div className={style.item_list_wrapper}>
                   {sessions.length > 0 ? (
                     sessions.map((session) => (
-                      <li
+                      <div
                         key={session.id}
                         className={style.session_item}
                         onClick={() => fetchSessionData(session.id)}
@@ -126,12 +130,12 @@ const SessionListModal = ({ sessions, onClose }) => {
                         <p>
                           End: {new Date(session.end_time).toLocaleString()}
                         </p>
-                      </li>
+                      </div>
                     ))
                   ) : (
                     <p>No sessions available.</p>
                   )}
-                </ul>
+                </div>
               )}
             </>
           )}

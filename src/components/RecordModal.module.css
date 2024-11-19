@@ -5,9 +5,12 @@
   left: 0;
   width: 100vw;
   height: 100vh;
+  z-index: 2;
 }
 
 .modal_wrapper {
+  z-index: 2;
+
   border-radius: 10px;
 
   position: fixed;
@@ -50,8 +53,8 @@
 
 .record_trigger_btn {
   background-color: rgb(255, 73, 73, 0.8);
-  transition: background-color 0.15s ease-in-out;
-  transition: color 0.3s ease-out;
+  transition: background-color 1s ease-out;
+  transition: color 0.7s ease-out;
 }
 
 .record_trigger_btn:hover {
@@ -62,7 +65,7 @@
 
 .close_btn {
   background-color: rgba(236, 236, 236, 0.4);
-  transition: all 0.15s ease-in-out;
+  transition: all 0.5s ease-out;
 }
 
 .close_btn:hover {

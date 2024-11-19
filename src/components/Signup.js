@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Signup.css";
+import style from "./Signup.module.css";
 import axios from "axios";
 
 const URL = "http://13.125.63.134/api";
@@ -12,6 +12,9 @@ const Signup = () => {
   const [confirm, setConfirm] = useState("");
 
   const [visible, setVisible] = useState(["password", "password"]);
+
+  const [pswVisibleFlag, setPswVisibleFlag] = useState(false);
+  const [confirmVisibleFlag, setConfirmVisibleFlag] = useState(false);
 
   const signupRequest = () => {
     axios
@@ -29,80 +32,95 @@ const Signup = () => {
   };
 
   const handleVisible = (index) => {
+    // 0 => password
+    // 1 => confirm
+
     let copy = [...visible];
     if (copy[index] === "password") {
       copy[index] = "text";
       setVisible(copy);
+      if (index === 0) setPswVisibleFlag(true);
+      else setConfirmVisibleFlag(true);
     } else {
       copy[index] = "password";
       setVisible(copy);
+      if (index === 0) setPswVisibleFlag(false);
+      else setConfirmVisibleFlag(false);
     }
   };
 
   return (
-    <div className="container">
-      <div className="login">
+    <div className={style.container}>
+      <div className={style.login}>
         <h1>Sign Up</h1>
 
-        <form className="form_container">
-          <div className="input_container">
+        <form className={style.form_container}>
+          <div className={style.input_container}>
             <div>
-              <label className="input_label" htmlFor="name">
+              <label className={style.input_label} htmlFor="name">
                 Name
               </label>
               <input
                 type="text"
                 id="name"
                 name="name"
-                className="input_box"
+                className={style.input_box}
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
               />
             </div>
             <div>
-              <label className="input_label" htmlFor="id">
+              <label className={style.input_label} htmlFor="id">
                 ID
               </label>
               <input
                 type="text"
                 id="id"
                 name="id"
-                className="input_box"
+                className={style.input_box}
                 onChange={(e) => {
                   setId(e.target.value);
                 }}
               />
             </div>
             <div>
-              <label className="input_label" htmlFor="password">
+              <label className={style.input_label} htmlFor="password">
                 Password
               </label>
-              <button type="button" onClick={(e) => handleVisible(0)}>
-                ㅁ
+              <button
+                className={style.set_visible_btn}
+                type="button"
+                onClick={(e) => handleVisible(0)}
+              >
+                {pswVisibleFlag ? "⦿" : "◉"}
               </button>
               <input
                 type={visible[0]}
                 id="password"
                 name="password"
-                className="input_box"
+                className={style.input_box}
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
               />
             </div>
             <div>
-              <label className="input_label" htmlFor="confirmPassword">
+              <label className={style.input_label} htmlFor="confirmPassword">
                 Confirm Password
               </label>
-              <button type="button" onClick={(e) => handleVisible(1)}>
-                ㅁ
+              <button
+                className={style.set_visible_btn}
+                type="button"
+                onClick={(e) => handleVisible(1)}
+              >
+                {confirmVisibleFlag ? "⦿" : "◉"}
               </button>
               <input
                 type={visible[1]}
                 id="confirmPassword"
                 name="confirmPassword"
-                className="input_box"
+                className={style.input_box}
                 onChange={(e) => {
                   setConfirm(e.target.value);
                 }}
@@ -127,7 +145,7 @@ const Signup = () => {
           </p>
           <button
             id="account"
-            className="signup_btn"
+            className={style.signup_btn}
             onClick={(e) => {
               e.preventDefault();
               if (password !== confirm) {
